@@ -136,6 +136,11 @@
         addTaskBtn.href =
           `/projects/${firstActive.dataset.projectId}/tasks/create`;
       }
+
+      const firstRow = document.querySelector('.project-row');
+if (firstRow) {
+    firstRow.click();
+}
     </script>
   </x-slot>
 
