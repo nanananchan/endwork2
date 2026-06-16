@@ -39,7 +39,7 @@ class TaskController extends Controller
             'project_id' => 'required|exists:projects,id',
         ]);
 
-        Task::create([
+        $task=Task::create([
             'title' => $request->title,
             'description' => $request->description,
             'status' => $request->status,
@@ -48,7 +48,7 @@ class TaskController extends Controller
             'creator_id' => auth()->id(),
         ]);
 
-        return redirect()->route('projects.index');
+        return redirect()->route('projects.index', ['project' => $task->project_id]);
     }
 
     /**
@@ -111,7 +111,7 @@ class TaskController extends Controller
         $task->assignments()->delete();
     }
 
-    return redirect()->route('projects.index');
+    return redirect()->route('projects.index', ['project' => $task->project_id]);
 }
 
     public function updateStatus(Request $request, Task $task)
@@ -125,7 +125,7 @@ class TaskController extends Controller
         'status' => $validated['status'],
     ]);
 
-    return redirect()->route('projects.index')->with('success', 'Task status updated successfully.');
+    return redirect()->route('projects.index', ['project' => $task->project_id])->with('success', 'Task status updated successfully.');
 }
 
 
@@ -134,10 +134,10 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        
+        $projectId = $task->project_id; 
         $this->authorize('delete', $task);
 
         $task->delete();
-        return redirect()->route('projects.index');
+        return redirect()->route('projects.index', ['project'=>$projectId]);
     }
 }

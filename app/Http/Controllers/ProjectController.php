@@ -11,13 +11,16 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
 $projects = Project::with([
         'tasks.creator',
         'tasks.comments.creator',
         'tasks.assignments',
-    ])->get();        return view('projects.index', compact('projects'));
+    ])->get(); 
+    $activeProjectId = $request->query('project', $projects->first()?->id);
+    
+    return view('projects.index', compact('projects', 'activeProjectId'));
     }
 
     /**

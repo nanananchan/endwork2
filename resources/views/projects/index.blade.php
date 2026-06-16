@@ -81,67 +81,52 @@
 
   </div>
 
-  <x-slot name="scripts">
-    <script>
-      document.querySelectorAll('.project-row').forEach(row => {
-        row.addEventListener('click', function(e) {
-          if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
+ <x-slot name="scripts">
+  <script>
+    const activeProjectId = "{{ $activeProjectId }}";
 
-          document.querySelectorAll('.project-row').forEach(r => {
-            r.classList.remove('active', 'bg-light');
-          });
+    document.querySelectorAll('.project-row').forEach(row => {
+      row.addEventListener('click', function(e) {
+        if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
 
-          document.querySelectorAll('.task-sublist').forEach(s => {
-            s.classList.add('d-none');
-          });
-
-          this.classList.add('active', 'bg-light');
-
-          const sublist = this.nextElementSibling;
-
-          if (sublist && sublist.classList.contains('task-sublist')) {
-            sublist.classList.remove('d-none');
-          }
-
-          const projectId = this.dataset.projectId;
-
-          document.getElementById('project-title').textContent =
-            this.dataset.projectName;
-
-          document.getElementById('project-placeholder')
-            .classList.add('d-none');
-
-          document.getElementById('task-list')
-            .classList.remove('d-none');
-
-          document.querySelectorAll('.project-tasks').forEach(pt => {
-            pt.classList.toggle(
-              'd-none',
-              pt.dataset.projectId !== projectId
-            );
-          });
-
-          const addTaskBtn = document.getElementById('add-task-btn');
-
-          if (addTaskBtn) {
-            addTaskBtn.href = `/projects/${projectId}/tasks/create`;
-          }
+        document.querySelectorAll('.project-row').forEach(r => {
+          r.classList.remove('active', 'bg-light');
         });
+
+        document.querySelectorAll('.task-sublist').forEach(s => {
+          s.classList.add('d-none');
+        });
+
+        this.classList.add('active', 'bg-light');
+
+        const sublist = this.nextElementSibling;
+        if (sublist && sublist.classList.contains('task-sublist')) {
+          sublist.classList.remove('d-none');
+        }
+
+        const projectId = this.dataset.projectId;
+
+        document.getElementById('project-title').textContent = this.dataset.projectName;
+        document.getElementById('project-placeholder').classList.add('d-none');
+        document.getElementById('task-list').classList.remove('d-none');
+
+        document.querySelectorAll('.project-tasks').forEach(pt => {
+          pt.classList.toggle('d-none', pt.dataset.projectId !== projectId);
+        });
+
+        const addTaskBtn = document.getElementById('add-task-btn');
+        if (addTaskBtn) {
+          addTaskBtn.href = `/projects/${projectId}/tasks/create`;
+        }
       });
+    });
 
-      const firstActive = document.querySelector('.project-row.active');
-      const addTaskBtn = document.getElementById('add-task-btn');
+    // Activate the right project on load
+    const targetRow = document.querySelector(`.project-row[data-project-id="${activeProjectId}"]`)
+      || document.querySelector('.project-row');
 
-      if (firstActive && addTaskBtn) {
-        addTaskBtn.href =
-          `/projects/${firstActive.dataset.projectId}/tasks/create`;
-      }
-
-      const firstRow = document.querySelector('.project-row');
-if (firstRow) {
-    firstRow.click();
-}
-    </script>
-  </x-slot>
+    if (targetRow) targetRow.click();
+  </script>
+</x-slot>
 
 </x-layout>
