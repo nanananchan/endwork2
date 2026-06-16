@@ -15,7 +15,7 @@
 
                 <div class="card-body">
 
-                    {{-- ERRORS --}}
+                    {{-- Errors --}}
                     @if($errors->any())
                         <div class="alert alert-danger">
                             <ul class="mb-0">
@@ -27,7 +27,7 @@
                     @endif
 
 
-                    {{-- FULL EDIT ACCESS (Admin / Privileged) --}}
+                    {{-- Full edit accesss (Admin,Privileged) --}}
                     @if(auth()->user()->can('update', $task))
 
                         <form method="POST" action="{{ route('tasks.update', $task) }}">
@@ -49,8 +49,6 @@
                                           class="form-control"
                                           rows="4">{{ old('description', $task->description) }}</textarea>
                             </div>
-
-                            {{-- ADDED: ASSIGN USER --}}
                             <div class="mb-3">
     <label class="form-label">Assign To</label>
 
@@ -97,7 +95,7 @@
                         </form>
 
 
-                    {{-- STATUS ONLY ACCESS (Assigned Users) --}}
+                    {{-- Status only access (Assigned users) --}}
                     @elseif(auth()->user()->can('updateStatus', $task))
 
                         <form method="POST" action="{{ route('tasks.updateStatus', $task) }}">

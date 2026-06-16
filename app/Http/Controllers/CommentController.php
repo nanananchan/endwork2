@@ -10,36 +10,34 @@ use App\Models\Task;
 class CommentController extends Controller
 {
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request, Task $task)
-    {
-        $this->authorize('createForTask', [Comment::class, $task]);
+public function destroy(Comment $comment)
+{
+    $this->authorize('delete', $comment);
 
-        $request->validate([
-            'content' => 'required|string|max:2000',
-        ]);
+    $projectId = $comment->task()->value('project_id'); // ✅ safer, direct DB query
 
-        Comment::create([
-            'content' => $request->content,
-            'task_id' => $task->id,
-            'creator_id' => auth()->id(),
-        ]);
+    $comment->delete();
 
-        return redirect()->back();
-    }
-
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Comment $comment)
-    {
-        $this->authorize('delete', $comment);
-
-        $comment->delete();
-
-        return redirect()->back();
-    }
+    return redirect()->route('projects.index', ['project' => $projectId]);
 }
+
+public function store(Request $request, Task $task)
+{
+    $this->authorize('createForTask', [Comment::class, $task]);
+    $request->validate([
+        'content' => 'required|string|max:2000',
+    ]);
+
+    $projectId = $task->project_id; // ✅ already have $task injected
+
+    Comment::create([
+        'content' => $request->content,
+        'task_id' => $task->id,
+        'creator_id' => auth()->id(),
+    ]);
+
+    return redirect()->route('projects.index', ['project' => $projectId]);
+}
+}
+
+
