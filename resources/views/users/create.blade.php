@@ -55,7 +55,7 @@
 
                     </form>
 
-                    <a href="{{ route('users.index') }}" class="btn btn-sm btn-secondary mb-3">
+                    <a href="{{ route('users.index') }}" class="btn btn-sm btn-outline-secondary mb-3 mt-3">
     Back to Users
 </a>
 
