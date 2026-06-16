@@ -94,7 +94,7 @@ class TaskController extends Controller
         'title', 'description', 'status', 'deadline'
     ));
 
-    //  MULTIPLE ASSIGNEES (sync style)
+    
     if ($request->filled('assigned_to')) {
 
         // remove old

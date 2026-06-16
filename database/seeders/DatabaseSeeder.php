@@ -16,43 +16,43 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
     public function run(): void
 {
-    // USERS
+    //users
     $admin = User::create([
         'name' => 'Admin User',
         'username' => 'admin',
         'role' => 'admin',
-        'password' => bcrypt('password'),
+        'password' => bcrypt('admin'),
     ]);
 
     $user1 = User::create([
         'name' => 'John Doe',
         'username' => 'john',
         'role' => 'employee',
-        'password' => bcrypt('password'),
+        'password' => bcrypt('john'),
     ]);
 
     $user2 = User::create([
         'name' => 'Jane Smith',
         'username' => 'jane',
         'role' => 'privileged',
-        'password' => bcrypt('password'),
+        'password' => bcrypt('jane'),
     ]);
 
-    // PROJECTS
+    //projects
     $project1 = Project::create([
-        'title' => 'Website Redesign',
+        'title' => 'Make salad',
         'creator_id' => $admin->id,
     ]);
 
     $project2 = Project::create([
-        'title' => 'Mobile App',
-        'creator_id' => $user1->id,
+        'title' => 'Bake potatoes',
+        'creator_id' => $user2->id,
     ]);
 
-    // TASKS
+    //tasks
     $task1 = Task::create([
-        'title' => 'Design UI',
-        'description' => 'Create new UI mockups',
+        'title' => 'Cut lettuce',
+        'description' => 'Cut greens',
         'status' => 'To Do',
         'deadline' => now()->addDays(7),
         'creator_id' => $admin->id,
@@ -60,15 +60,15 @@ class DatabaseSeeder extends Seeder
     ]);
 
     $task2 = Task::create([
-        'title' => 'Build API',
-        'description' => 'Develop REST API',
+        'title' => 'Cook meat',
+        'description' => 'In oven',
         'status' => 'In Progress',
         'deadline' => now()->addDays(10),
         'creator_id' => $user1->id,
         'project_id' => $project2->id,
     ]);
 
-    // COMMENTS
+    //comments
     Comment::create([
         'content' => 'This looks good!',
         'task_id' => $task1->id,
@@ -76,12 +76,12 @@ class DatabaseSeeder extends Seeder
     ]);
 
     Comment::create([
-        'content' => 'I will start working on this.',
+        'content' => 'I will start doing this.',
         'task_id' => $task2->id,
         'creator_id' => $user2->id,
     ]);
 
-    // ASSIGNMENTS
+    // assignments
     Assignment::create([
         'task_id' => $task1->id,
         'from_id' => $admin->id,
